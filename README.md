@@ -1,4 +1,7 @@
-armyofjon
+Recruit an Army of People Who Look Like You!
 =========
 
-An Example of JS GetUserMedia paired with Facial Recognition
+Example site: armyofjon.com
+... doesn't work yet. But it will!
+
+An Example of Javascript / html5 GetUserMedia paired with Facial Recognition
