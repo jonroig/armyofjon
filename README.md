@@ -17,5 +17,5 @@ To build your own army site:
 
 Example image loading script. The subject_id is the image's file name with the "." replaced with a "-".
 ```
-curl -v -H "app_id:APP_ID" -H "app_key:APP_KEY" -X POST "http://api.kairos.com/enroll" -d '{"url": "http://armyofjon.com/pics/jon1.jpg","subject_id":"jon1-jpg","gallery_name":"jonpics","multiple_faces":"false"}'
+curl -v -H "app_id:APP_ID" -H "app_key:APP_KEY" -X POST "http://api.kairos.com/enroll" -d '{"url": "http://armyofjon.com/pics/jon1.jpg","subject_id":"jon1-jpg","gallery_name":"pics","multiple_faces":"false"}'
 ```
