@@ -1,20 +1,35 @@
 <?php
+/***
+Army of Jon by Jon Roig (jon roig at jon roig dot com / @runnr_az)
+Hit me up if you find this at all useful.
 
+
+***/
+
+
+
+// kairos settings
+// this is my key for this project so be nice with it...
+// grab your own from karos.com
 $apiAppId = 'fbe65900';
 $apiAppKey = 'fe41439fabbbf4ed69a92f0f8ee7f36b';
 
-// ajaxy stuff...
+// ajaxy stuff... keeping it simple
 if (isset($_REQUEST['ajax']))
 {
 	// match a picture...
 	if ($_REQUEST['ajax'] == 'match')
 	{
+		// split out the actual image data from the descriptor and put it in a json object
+		// with some settings
 		$imageData = explode(',',$_REQUEST['match']);
-
 		$data = '{"image":"'.$imageData[1].'","gallery_name":"pics" ,"threshold":"0" }';
 
+		// test image... make sure it's hooked up...
 		//$data = '{"image":"http://armyofjon.com/jonpics/jon7.jpg","gallery_name":"jonpics" ,"threshold":"0" }';
-		$headers = array("app_id:fbe65900", "app_key:fe41439fabbbf4ed69a92f0f8ee7f36b");
+
+		// build the appropriate curl call and hit the kairos recognize api...
+		$headers = array("app_id:".$apiAppId, "app_key:".$apiAppKey);
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_URL, 'http://api.kairos.com/recognize');
@@ -22,14 +37,14 @@ if (isset($_REQUEST['ajax']))
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         $response = curl_exec($ch);
-        echo $response;
 		curl_close($ch);
+
+		// just pass the results directly back to the client since they're already json
+		echo $response;
 	}
 
 die();
 }
-
-
 ?>
 <!doctype html>
 <html>
@@ -47,9 +62,9 @@ die();
       	<div class="header">
         	<nav>
           		<ul class="nav nav-pills pull-right">
-            		<li role="presentation" class="active"><a href="#">Home</a></li>
-		            <li role="presentation"><a href="#">About</a></li>
-		            <li role="presentation"><a href="#">Contact</a></li>
+            		<li role="presentation" class="active"><a href="#">Join</a></li>
+		            <li role="presentation"><a href="#about">About</a></li>
+		            <li role="presentation"><a href="#contact">Contact</a></li>
 		            <li role="presentation"><a href="https://github.com/jonroig/armyofjon" target="_blank">GitHub</a></li>
           		</ul>
         	</nav>
@@ -57,17 +72,18 @@ die();
       	</div>
 
       	<div class="jumbotron">
-	        <h1>Join the Army</h1>
+	        <h1>Join My Army</h1>
 	        <p class="lead">
-	        	Millions of years of evolution have lead to this moment.
-	        	<br/>Futuristic html5 technology will take control of your webcam.
-	        	<br/>Our facial recognition algorithms will judge you.
+	        	Futuristic html5 technology takes control of your webcam.
+	        	<br/>Facial recognition algorithms scan and judge you.
+	        	<br/>It only takes seconds.
 	        </p>
-	        <p><a class="btn btn-lg btn-success" href="#" role="button">Join the Army!</a></p>
+	        <p><a class="btn btn-lg btn-success" id="scanMeButton" href="#" role="button">Scan Me!</a></p>
       	</div>
 
       	<div class="row marketing">
 	        <div class="col-lg-6">
+	        	<a name="about"></a>
 	          	<h4>Uhhh... what?</h4>
 	        	<p>
 	        		All my life, people tell me that I look like someone they know...
@@ -99,6 +115,33 @@ die();
 	          		Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.
 	          	</p>
 
+	          	<h4>Can I Upload a Picture?</h4>
+	          	<p>
+	          		Yup! <a href="#">Upload here</a>.
+	          	</p>
+
+	          	<h4>So... Why Did You Do This?</h4>
+	          	<p>
+	          		Honestly... I have no idea. Why are you even reading this?
+	          	</p>
+	          	<p>
+	          		As a fulltime professional web developer, I need to keep up with the latest and greatest stuff to
+	          		ensure my continued relevance. There's always new things, new technologies that you're expected
+	          		to know.
+	          		You can't just read about these things in a book... or, at least I can't. I needed a project.
+	          		 In the
+	          		spirit of <a href="http://www.justyo.co/" target="_blank">Yo</a>,
+	          		<a href="http://xoxco.com/x/tacos/" target="_blank">TacoText</a> and
+	          		<a href="http://www.textethan.com/" target="_blank">Ethan</a>, I needed something quick and pointless.
+	          		I like the idea of combining readily existing
+	          		technologies, some which, like the facial recognition system, are very complicated, and stringing them together
+	          		to do something kind of dumb.
+	          	</p>
+	          	<p>
+	          		To that end, this is kind of an art project. We'll see how the corpus of pictures which compose my army changes
+	          		over time.
+	          	</p>
+
 	          	<h4>Technology Stack</h4>
 	          	<ul>
 	          		<li>
@@ -121,13 +164,16 @@ die();
 	          		</li>
 	          	</ul>
 
-	          	<h4>Contact Jon</h4>
+	          	<a name="contact"></a><h4>Contact Jon</h4>
 	          	<ul>
 	          		<li>
 	          			Email: jon at jon roig dot com
 	          		</li>
 	          		<li>
 	          			Twitter: <a href="https://twitter.com/runnr_az" target="_blank">@runnr_az</a>
+	          		</li>
+	          		<li>
+	          			Facebook: <a href="https://www.facebook.com/jonroig" target="_blank">jonroig</a>
 	          		</li>
 	          		<li>
 	          			Instagram: <a href="http://instagram.com/jonroig" target="_blank">@jonroig</a>
@@ -147,6 +193,36 @@ die();
       	</footer>
 
 	</div> <!-- /container -->
+
+
+	<div class="modal fade" id="webcamModal" tabindex="-1" role="dialog" aria-labelledby="webcamModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-webcam">
+    		<div class="modal-content">
+      			<div class="modal-header" id="webcamModalHeader" style="display: none">
+        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        			<h4 class="modal-title" id="webcamModalLabel">Accessing Webcam...</h4>
+      			</div>
+      			<div class="modal-body">
+    				<div id="welcome">
+						^^^^ Press Allow! ^^^^
+					</div>
+					<div id="container" style="display:none">
+						<video autoplay id="video" width="640" ></video>
+					</div>
+					<div id="picture" style="display: none">
+						<canvas id="canvas" width="640" height="480"></canvas>
+						<img src="http://placekitten.com/g/320/261" id="photo" alt="photo"/>
+						<div id="statusText"></div>
+					</div>
+      			</div>
+
+      			<div class="modal-footer" id="webcamModalFooter" style="display: none">
+        			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        			<button type="button" class="btn btn-primary" id="sendAndScanButton">Send and scan</button>
+      			</div>
+    		</div>
+  		</div>
+	</div>
 </body>
 
 <!--
@@ -159,18 +235,7 @@ die();
         </p>
 
 
-	<div id="welcome">
-		<div id="pressAllow">^^^^ Press Allow!</div>
-		<h1>Army of Jon</h1>
-	</div>
-	<div id="container" style="display:none">
-		<video autoplay id="video" width="640" height="480"></video>
-	</div>
-	<div id="picture" style="display: none">
-		<canvas id="canvas" width="640" height="480"></canvas>
-		<img src="http://placekitten.com/g/320/261" id="photo" alt="photo"/>
-		<div id="statusText"></div>
-	</div>
+
 	-->
 
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

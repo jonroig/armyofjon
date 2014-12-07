@@ -88,3 +88,14 @@ body {
   }
 }
 
+
+.modal-webcam
+{
+	width: 673px !important;
+}
+
+#welcome
+{
+	text-align: center;
+	font-size: 48px;
+}

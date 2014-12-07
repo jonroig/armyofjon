@@ -14,15 +14,45 @@ aoj.app=(function()
       canvas       = document.querySelector('#canvas');
 
   var imageData = null;
+  var webcamStarted = false;
 
   return {
+
+    // basic setup for the show to come
     init: function()
     {
-      return;
-      // set up the picture function
+      // get that big green button going
+      $('#scanMeButton').click(function(){
+        aoj.app.startWebcam();
+
+        $('#webcamModal').modal('show');
+      });
+
       $('#video').click(function(){
         aoj.app.takePicture();
-      })
+      });
+
+      $('#sendAndScanButton').click(function(){
+        aoj.app.takePicture();
+      });
+
+      // this keep the dialog box cool
+      $(window).scroll(function(){$(window).resize()});
+      $('#webcamModal').scroll(function(){$(window).resize()});
+
+      return;
+    },
+
+
+    // start the webcam
+    startWebcam: function()
+    {
+      // set up the picture function if we need to
+      if (webcamStarted == true)
+      {
+        aoj.app.hideWelcome();
+        return;
+      }
 
       navigator.getMedia = ( navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
@@ -35,6 +65,7 @@ aoj.app=(function()
         },
         function(stream)
         {
+          webcamStarted = true;
           aoj.app.hideWelcome();
 
           if (navigator.mozGetUserMedia)
@@ -62,12 +93,19 @@ aoj.app=(function()
       $('#container').show();
       $('#statusText').html('');
       $('#photo').hide();
+      $('#webcamModalLabel').html('Join My Army');
+      $('#webcamModalFooter').show();
+      $('#webcamModalHeader').show();
+
+      // do a little modal cleanup
+      $(window).resize();
     },
 
 
     // take a picture from the webcam
     takePicture: function()
     {
+      // convert the video to canvas then write it to an image
       var canvas = document.querySelector('#canvas');
       canvas.getContext('2d').drawImage(video, 0, 0);
       imageData = canvas.toDataURL('image/png');
@@ -80,6 +118,7 @@ aoj.app=(function()
 
       $('#statusText').html('Matching...');
 
+      // send the image and stuff to the server for analysis
       $.ajax({
         type:"POST",
         url:'?ajax=match',
@@ -88,11 +127,6 @@ aoj.app=(function()
         data:{'match':imageData},
         success: this.processLookup
       });
-    },
-
-    returnImageData: function()
-    {
-      return imageData;
     },
 
 
@@ -125,13 +159,22 @@ aoj.app=(function()
           var confidence = Math.round(data.images[0].transaction.confidence * 100);
           var outputTxt = 'Match! Confidence=' + confidence + '%<br/>';
 
-          outputTxt += '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject + '.jpg"/>';
+          outputTxt += '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
 
           $('#statusText').html(outputTxt);
-          $('#matchPic').width(640);
+          $('#matchPic').width(567);
+          $(window).resize();
         }
       }
+    },
+
+
+    // just an easy hook to the imageData
+    returnImageData: function()
+    {
+      return imageData;
     }
+
 
 
   }
