@@ -1,3 +1,10 @@
+/**
+Core Army of Jon Javascript Code
+... hopefully this is useful to someone.
+
+ - jon (jon@jonroig.com)
+
+**/
 var aoj=aoj||{};
 
 aoj.app=(function()
@@ -6,12 +13,10 @@ aoj.app=(function()
       video        = document.querySelector('#video'),
       canvas       = document.querySelector('#canvas');
 
-
   return {
     init: function()
     {
-      console.log('init!');
-
+      // set up the picture function
       $('#video').click(function(){
         aoj.app.takePicture();
       })
@@ -20,13 +25,13 @@ aoj.app=(function()
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia ||
                          navigator.msGetUserMedia);
+
       navigator.getMedia({
         video: true,
         audio: false
         },
         function(stream)
         {
-          console.log('stream!');
           aoj.app.hideWelcome();
 
           if (navigator.mozGetUserMedia)
@@ -47,6 +52,7 @@ aoj.app=(function()
     },
 
 
+    // hide everything and set the stage to take a picture
     hideWelcome: function()
     {
       $('#welcome').hide();
@@ -56,13 +62,13 @@ aoj.app=(function()
     },
 
 
+    // take a picture from the webcam
     takePicture: function()
     {
       var canvas = document.querySelector('#canvas');
       canvas.getContext('2d').drawImage(video, 0, 0);
       var data = canvas.toDataURL('image/png');
 
-      console.log('data',data);
       $('#photo').show();
       $('#photo').attr('src', data);
       $('#container').hide();
@@ -82,10 +88,9 @@ aoj.app=(function()
     },
 
 
+    // ajax response... success? failure?
     processLookup: function(data)
     {
-      console.log('processLookup=',data);
-
       // handle erorrs
       if (typeof data.Errors != 'undefined')
       {
@@ -105,6 +110,8 @@ aoj.app=(function()
         {
           $('#statusText').html('Failure! No Match! <a href="javascript:aoj.app.hideWelcome();">Try Again</a>' );
         }
+
+        // otherwise... success!
         else if (typeof data.images[0].candidates != 'undefined')
         {
           var confidence = Math.round(data.images[0].transaction.confidence * 100);
@@ -121,7 +128,6 @@ aoj.app=(function()
 
   }
 }());
-
 
 aoj.app.init();
 
