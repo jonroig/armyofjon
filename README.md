@@ -1,4 +1,4 @@
-Build Your Army!
+Build An Army of You!
 =========
 
 Demo site: [armyofjon.com](http://armyofjon.com)
