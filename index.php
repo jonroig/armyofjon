@@ -16,7 +16,7 @@ if (isset($_REQUEST['ajax']))
 	{
 		$imageData=explode(',',$_REQUEST['match']);
 
-		$data = '{"image":"'.$imageData[1].'","gallery_name":"jonpics" ,"threshold":"0" }';
+		$data = '{"image":"'.$imageData[1].'","gallery_name":"pics" ,"threshold":"0" }';
 
 		//$data = '{"image":"http://armyofjon.com/jonpics/jon7.jpg","gallery_name":"jonpics" ,"threshold":"0" }';
 		$headers = array("app_id:fbe65900", "app_key:fe41439fabbbf4ed69a92f0f8ee7f36b");

@@ -28,7 +28,7 @@ aoj.app=(function()
         {
           console.log('stream!');
           aoj.app.hideWelcome();
-          aoj.app.resizeVideoFullScreen();
+
           if (navigator.mozGetUserMedia)
           {
             video.mozSrcObject = stream;
@@ -46,18 +46,15 @@ aoj.app=(function()
       )
     },
 
+
     hideWelcome: function()
     {
       $('#welcome').hide();
       $('#container').show();
+      $('#statusText').html('');
+      $('#photo').hide();
     },
 
-    resizeVideoFullScreen: function()
-    {
-      return;
-      var maxWidth = $(window).width();
-      $('#video').width(maxWidth);
-    },
 
     takePicture: function()
     {
@@ -66,7 +63,7 @@ aoj.app=(function()
       var data = canvas.toDataURL('image/png');
 
       console.log('data',data);
-
+      $('#photo').show();
       $('#photo').attr('src', data);
       $('#container').hide();
       $('#picture').show();
@@ -83,6 +80,7 @@ aoj.app=(function()
         success: this.processLookup
       });
     },
+
 
     processLookup: function(data)
     {
@@ -105,25 +103,19 @@ aoj.app=(function()
         // no match to any gallery item...
         if (data.images.length == 1 && data.images[0].transaction.gallery_name == '')
         {
-          $('#statusText').html('Failure! No Match');
+          $('#statusText').html('Failure! No Match! <a href="javascript:aoj.app.hideWelcome();">Try Again</a>' );
         }
         else if (typeof data.images[0].candidates != 'undefined')
         {
           var confidence = Math.round(data.images[0].transaction.confidence * 100);
           var outputTxt = 'Match! Confidence=' + confidence + '%<br/>';
 
-          outputTxt += '<img id="matchPic" src="/jonpics/' + data.images[0].transaction.subject + '.jpg"/>';
+          outputTxt += '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject + '.jpg"/>';
 
           $('#statusText').html(outputTxt);
           $('#matchPic').width(640);
         }
-
-
       }
-
-
-
-
     }
 
 
@@ -133,64 +125,3 @@ aoj.app=(function()
 
 aoj.app.init();
 
-$(window).resize(function(){
-  aoj.app.resizeVideoFullScreen();
-})
-
-/**
-(function() {
-
-  var streaming = false,
-      video        = document.querySelector('#video'),
-      cover        = document.querySelector('#cover'),
-      canvas       = document.querySelector('#canvas'),
-      photo        = document.querySelector('#photo'),
-      startbutton  = document.querySelector('#startbutton'),
-      width = 320,
-      height = 0;
-  navigator.getMedia = ( navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia ||
-                         navigator.msGetUserMedia);
-  navigator.getMedia(
-    {
-      video: true,
-      audio: false
-    },
-    function(stream) {
-      if (navigator.mozGetUserMedia) {
-        video.mozSrcObject = stream;
-      } else {
-        var vendorURL = window.URL || window.webkitURL;
-        video.src = vendorURL.createObjectURL(stream);
-      }
-      video.play();
-    },
-    function(err) {
-      console.log("An error occured! " + err);
-    }
-  );
-  video.addEventListener('canplay', function(ev){
-    if (!streaming) {
-      height = video.videoHeight / (video.videoWidth/width);
-      video.setAttribute('width', width);
-      video.setAttribute('height', height);
-      canvas.setAttribute('width', width);
-      canvas.setAttribute('height', height);
-      streaming = true;
-    }
-  }, false);
-  function takepicture() {
-    canvas.width = width;
-    canvas.height = height;
-    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
-    var data = canvas.toDataURL('image/png');
-    photo.setAttribute('src', data);
-  }
-  startbutton.addEventListener('click', function(ev){
-    takepicture();
-    ev.preventDefault();
-  }, false);
-})();
-
-**/
