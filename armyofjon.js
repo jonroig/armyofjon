@@ -13,9 +13,12 @@ aoj.app=(function()
       video        = document.querySelector('#video'),
       canvas       = document.querySelector('#canvas');
 
+  var imageData = null;
+
   return {
     init: function()
     {
+      return;
       // set up the picture function
       $('#video').click(function(){
         aoj.app.takePicture();
@@ -67,10 +70,10 @@ aoj.app=(function()
     {
       var canvas = document.querySelector('#canvas');
       canvas.getContext('2d').drawImage(video, 0, 0);
-      var data = canvas.toDataURL('image/png');
+      imageData = canvas.toDataURL('image/png');
 
       $('#photo').show();
-      $('#photo').attr('src', data);
+      $('#photo').attr('src', imageData);
       $('#container').hide();
       $('#picture').show();
       $('#canvas').hide();
@@ -82,9 +85,14 @@ aoj.app=(function()
         url:'?ajax=match',
         async:true,
         dataType:'json',
-        data:{'match':data},
+        data:{'match':imageData},
         success: this.processLookup
       });
+    },
+
+    returnImageData: function()
+    {
+      return imageData;
     },
 
 
