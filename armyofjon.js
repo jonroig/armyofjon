@@ -63,7 +63,9 @@ aoj.app=(function()
       $('#uploadModal').modal('show');
       $('#uploadModalLabel').html('Uploading...');
       $('#uploadPhoto').attr('src', base64Image);
-      $('#uploadStatusText').hide();
+      $('#uploadPhoto').width(640);
+      $('#uploadStatusText').show().html('Transmitting...');
+      $('#uploadModalImgArea').html('');
 
       // send the image and stuff to the server for analysis
       $.ajax({
@@ -72,7 +74,12 @@ aoj.app=(function()
         async:true,
         dataType:'json',
         data:{'match': base64Image},
-        success: this.processLookup
+        success: this.processLookup,
+        error: function( jqXHR, textStatus, errorThrown){
+          console.log('fail! errorThrown=' + errorThrown);
+          $('#uploadModalLabel').html('Upload failed');
+          $('#uploadStatusText').html('Failure: ' + errorThrown);
+        }
       });
     },
 
@@ -174,6 +181,7 @@ aoj.app=(function()
       // handle erorrs
       if (typeof data.error != 'undefined')
       {
+        // this is an image upload error
         $('#uploadStatusText').hide();
         $('#uploadModalMessage').html('Invalid file format :(');
         $('#uploadModalLabel').html('Upload failed');
@@ -181,6 +189,7 @@ aoj.app=(function()
 
       else if (typeof data.Errors != 'undefined')
       {
+        // data errors
         var errorMessage = '';
         for(var x = 0; x < data.Errors.length; x++)
         {
@@ -211,16 +220,25 @@ aoj.app=(function()
         // otherwise... success!
         else if (typeof data.images[0].candidates != 'undefined')
         {
+          $('#uploadModalLabel').html('Match!');
+
           var confidence = Math.round(data.images[0].transaction.confidence * 100);
           var outputTxt = 'Match! Confidence=' + confidence + '%<br/>';
           $('#statusText').html(outputTxt);
+          $('#uploadStatusText').show().html(outputTxt);
 
           outputTxt = '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
           outputTxt += "<br/>Congratulations! You've been accepted! Your picture will be used as a sample for all future Army of Jon members.";
           $('#webcamModalImgArea').html(outputTxt);
-          $('#uploadStatusText').show().html(outputTxt);
+
+          outputTxt = '<img id="uploadMatchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
+          outputTxt += "<br/>Congratulations! You've been accepted! Your picture will be used as a sample for all future Army of Jon members.";
+          $('#uploadModalImgArea').show().html(outputTxt);
 
           $('#matchPic').width(640);
+          $('#uploadMatchPic').width(640);
+          $('#uploadMatchPic').css('left','15px').css('position','relative');
+
           $('#sendAndScanButton').hide();
           $(window).resize();
         }

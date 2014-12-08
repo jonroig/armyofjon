@@ -138,6 +138,14 @@ if (isset($_REQUEST['ajax']))
 		          	<p>
 		          		Note: All pics must be of a single person.
 		          	</p>
+		          	<h4>Why Doesn't This Work On My iPhone?</h4>
+		          	<p>
+		          		Mobile browsers don't support getUserMedia yet.
+		          	</p>
+		          	<p>
+		          		Lame... I know. I might build an iPhone version at some point.
+		          	</p>
+
 		          	<h4>So... Why Did You Do This?</h4>
 		          	<p>
 		          		Honestly... I have no idea. Why are you even reading this?
@@ -263,6 +271,7 @@ if (isset($_REQUEST['ajax']))
 	    				<img src="http://placekitten.com/g/320/261" id="uploadPhoto" alt="photo"/>
 	      			</div>
 	      			<div id="uploadStatusText"></div>
+	      			<div id="uploadModalImgArea"></div>
 
 	      			<div class="modal-footer" id="uploadModalFooter">
 	        			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
