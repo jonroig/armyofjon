@@ -34,6 +34,10 @@ aoj.app=(function()
         aoj.app.takePicture();
       });
 
+      $('#webcamModalTryAgainButton').click(function(){
+        aoj.app.hideWelcome();
+      });
+
       // file input stuff for uploading images
       $('#fileInput').change(function(e){
         var uploadFile = $('#fileInput'). prop('files')[0];
@@ -57,9 +61,9 @@ aoj.app=(function()
     beginImageUpload: function(base64Image)
     {
       $('#uploadModal').modal('show');
+      $('#uploadModalLabel').html('Uploading...');
       $('#uploadPhoto').attr('src', base64Image);
-      $('#uploadStatusText').show();
-      $('#uploadStatusText').html('Uploading...');
+      $('#uploadStatusText').hide();
 
       // send the image and stuff to the server for analysis
       $.ajax({
@@ -120,13 +124,14 @@ aoj.app=(function()
     {
       $('#welcome').hide();
       $('#container').show();
-      $('#statusText').html('');
+      $('#statusText').hide();
       $('#photo').hide();
       $('#webcamModalLabel').html('Join My Army');
       $('#webcamModalFooter').show();
       $('#webcamModalHeader').show();
-      $('#sendAndScanButton').html('Send and scan');
-      $('#sendAndScanButton').attr('disabled',false)
+      $('#sendAndScanButton').show().html('Send and scan');
+      $('#sendAndScanButton').attr('disabled',false);
+      $('#webcamModalTryAgainButton').hide();
       // do a little modal cleanup
       $(window).resize();
     },
@@ -148,7 +153,7 @@ aoj.app=(function()
       $('#picture').show();
       $('#canvas').hide();
 
-      $('#statusText').html('Matching...');
+      $('#statusText').show().html('Matching...');
 
       // send the image and stuff to the server for analysis
       $.ajax({
@@ -170,8 +175,8 @@ aoj.app=(function()
       if (typeof data.error != 'undefined')
       {
         $('#uploadStatusText').hide();
-        $('#uploadStatusText').html('You are a failure.');
         $('#uploadModalMessage').html('Invalid file format :(');
+        $('#uploadModalLabel').html('Upload failed');
       }
 
       else if (typeof data.Errors != 'undefined')
@@ -183,6 +188,11 @@ aoj.app=(function()
         }
         $('#statusText').html('Failure! ' + errorMessage);
         $('#uploadStatusText').html('Failure! ' + errorMessage);
+
+
+        $('#sendAndScanButton').attr('disabled',false).hide();
+        $('#webcamModalTryAgainButton').show();
+
       }
 
       // handle non-errors
@@ -193,6 +203,9 @@ aoj.app=(function()
         {
           $('#statusText').html('Failure! No Match! <a href="javascript:aoj.app.hideWelcome();">Try Again</a>' );
           $('#uploadStatusText').html('Failure! No Match!');
+
+          $('#sendAndScanButton').attr('disabled',false).hide();
+          $('#webcamModalTryAgainButton').show();
         }
 
         // otherwise... success!
@@ -200,13 +213,15 @@ aoj.app=(function()
         {
           var confidence = Math.round(data.images[0].transaction.confidence * 100);
           var outputTxt = 'Match! Confidence=' + confidence + '%<br/>';
-
-          outputTxt += '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
-
           $('#statusText').html(outputTxt);
-          $('#uploadStatusText').html(outputTxt);
 
-          $('#matchPic').width(567);
+          outputTxt = '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
+          outputTxt += "<br/>Congratulations! You've been accepted! Your picture will be used as a sample for all future Army of Jon members.";
+          $('#webcamModalImgArea').html(outputTxt);
+          $('#uploadStatusText').show().html(outputTxt);
+
+          $('#matchPic').width(640);
+          $('#sendAndScanButton').hide();
           $(window).resize();
         }
       }

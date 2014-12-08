@@ -237,13 +237,14 @@ if (isset($_REQUEST['ajax']))
 							<canvas id="canvas" width="640" height="480"></canvas>
 							<img src="http://placekitten.com/g/320/261" id="photo" alt="photo"/>
 							<div id="statusText"></div>
+							<div id="webcamModalImgArea"></div>
 						</div>
 	      			</div>
 
 	      			<div class="modal-footer" id="webcamModalFooter" style="display: none">
 	        			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	        			<button type="button" class="btn btn-primary" id="sendAndScanButton">Send and scan</button>
-	        			<button type="button" class="btn btn-primary" style="display: none" id="tryAgainButton">Try Again</button>
+	        			<button type="button" class="btn btn-primary" style="display: none" id="webcamModalTryAgainButton">Try Again</button>
 	      			</div>
 	    		</div>
 	  		</div>
