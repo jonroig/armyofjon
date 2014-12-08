@@ -9,8 +9,7 @@ var aoj=aoj||{};
 
 aoj.app=(function()
 {
-  var streaming = false,
-      video        = document.querySelector('#video'),
+  var video        = document.querySelector('#video'),
       canvas       = document.querySelector('#canvas');
 
   var imageData = null;
@@ -24,7 +23,6 @@ aoj.app=(function()
       // get that big green button going
       $('#scanMeButton').click(function(){
         aoj.app.startWebcam();
-
         $('#webcamModal').modal('show');
       });
 
@@ -36,11 +34,42 @@ aoj.app=(function()
         aoj.app.takePicture();
       });
 
+      // file input stuff for uploading images
+      $('#fileInput').change(function(e){
+        var uploadFile = $('#fileInput'). prop('files')[0];
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+           aoj.app.beginImageUpload(reader.result);
+        }
+
+        reader.readAsDataURL(uploadFile);
+      });
+
       // this keep the dialog box cool
       $(window).scroll(function(){$(window).resize()});
       $('#webcamModal').scroll(function(){$(window).resize()});
 
       return;
+    },
+
+
+    beginImageUpload: function(base64Image)
+    {
+      $('#uploadModal').modal('show');
+      $('#uploadPhoto').attr('src', base64Image);
+      $('#uploadStatusText').show();
+      $('#uploadStatusText').html('Uploading...');
+
+      // send the image and stuff to the server for analysis
+      $.ajax({
+        type:"POST",
+        url:'?ajax=match',
+        async:true,
+        dataType:'json',
+        data:{'match': base64Image},
+        success: this.processLookup
+      });
     },
 
 
@@ -96,7 +125,8 @@ aoj.app=(function()
       $('#webcamModalLabel').html('Join My Army');
       $('#webcamModalFooter').show();
       $('#webcamModalHeader').show();
-
+      $('#sendAndScanButton').html('Send and scan');
+      $('#sendAndScanButton').attr('disabled',false)
       // do a little modal cleanup
       $(window).resize();
     },
@@ -105,6 +135,8 @@ aoj.app=(function()
     // take a picture from the webcam
     takePicture: function()
     {
+      $('#sendAndScanButton').html('Transmitting...').attr('disabled',true);
+
       // convert the video to canvas then write it to an image
       var canvas = document.querySelector('#canvas');
       canvas.getContext('2d').drawImage(video, 0, 0);
@@ -133,8 +165,16 @@ aoj.app=(function()
     // ajax response... success? failure?
     processLookup: function(data)
     {
+
       // handle erorrs
-      if (typeof data.Errors != 'undefined')
+      if (typeof data.error != 'undefined')
+      {
+        $('#uploadStatusText').hide();
+        $('#uploadStatusText').html('You are a failure.');
+        $('#uploadModalMessage').html('Invalid file format :(');
+      }
+
+      else if (typeof data.Errors != 'undefined')
       {
         var errorMessage = '';
         for(var x = 0; x < data.Errors.length; x++)
@@ -142,6 +182,7 @@ aoj.app=(function()
           errorMessage += data.Errors[x].Message + ".";
         }
         $('#statusText').html('Failure! ' + errorMessage);
+        $('#uploadStatusText').html('Failure! ' + errorMessage);
       }
 
       // handle non-errors
@@ -151,6 +192,7 @@ aoj.app=(function()
         if (data.images.length == 1 && data.images[0].transaction.gallery_name == '')
         {
           $('#statusText').html('Failure! No Match! <a href="javascript:aoj.app.hideWelcome();">Try Again</a>' );
+          $('#uploadStatusText').html('Failure! No Match!');
         }
 
         // otherwise... success!
@@ -162,6 +204,8 @@ aoj.app=(function()
           outputTxt += '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
 
           $('#statusText').html(outputTxt);
+          $('#uploadStatusText').html(outputTxt);
+
           $('#matchPic').width(567);
           $(window).resize();
         }
@@ -179,6 +223,7 @@ aoj.app=(function()
 
   }
 }());
+
 
 aoj.app.init();
 
