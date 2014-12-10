@@ -5,13 +5,13 @@ Demo sites: [armyofjon.com](http://armyofjon.com) and [armyofnicolascage.com](ht
 
 Connect with the people in the world who look like you!
 
-... an example of javascript / html5 getUserMedia paired with facial recognition.
+... a dubious experiment using javascript / html5 getUserMedia paired with facial recognition.
 
 To build your own army site:
 * Get an API account at  [Kairos.com](http://kairos.com)
 * Change the API key details in index.php
 * Put your sample pictures into the pics directory
-* Prime the recognition engine and load your sample images in from the command line. You can load as many or as few samples as you like. Images must be of only a single subject
+* Prime the recognition engine and enroll your sample images from the command line. You can enroll as many or as few samples as you like. Images must be of only a single subject
 * Enjoy!
 
 
