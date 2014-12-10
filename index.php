@@ -77,8 +77,8 @@ include('armyofjon.php');
 			        	Millions of years of evolution have led to this moment.
 			        </p>
 			        <p>
-			        	With recent advances in browser technology, we can now harness the power of html5 to send images
-			        	captured directly from your webcam directly through outer space to our servers located high in the clouds.
+			        	With recent advances in browser technology, we harness the power of html5 to send images
+			        	captured directly from your webcam through outer space to our servers located high in the clouds.
 			        	Our learning machines use sophisticated facial recognition algorithms to determine how closely your face
 			        	matches that of the existing army.
 			        </p>
