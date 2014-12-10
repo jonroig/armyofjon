@@ -14,49 +14,7 @@ $apiGalleryId = 'pics';
 $baseImageURL = 'http://armyofjon.com/pics';
 
 include('kairosInterface.php');
-
-// ajaxy stuff... keeping it simple
-if (isset($_REQUEST['ajax']))
-{
-	// match a picture...
-	if ($_REQUEST['ajax'] == 'match')
-	{
-		// split out the actual image data from the descriptor
-		$imageData = explode(',',$_REQUEST['match']);
-
-		// do a quick image validation test
-		$imgContainer = @imagecreatefromstring(base64_decode($imageData[1]));
-		if ($imgContainer == false)
-		{
-			// not actually a valid image file :(
-			die('{"error":"invalid image"}');
-		}
-
-		// fire up the kairos recognize api...
-		$kairosObj = new kairosInterface($apiAppId, $apiAppKey, $apiGalleryId);
-		$response = $kairosObj->recognize($imageData[1]);
-
-		// is it a succcess?
-		$jsonResponse = json_decode($response);
-		if (isset($jsonResponse->images) && isset($jsonResponse->images[0]->candidates) && isset($jsonResponse->images[0]->transaction->subject) && $jsonResponse->images[0]->transaction->confidence != 1)
-		{
-			// if it's a match, we want to save it...
-			$uniqueId = uniqid();
-			imagepng($imgContainer, "pics/".$uniqueId.'.png');
-
-			// enroll the new pic in the gallery
-			$newImageURL = $baseImageURL.'/'.$uniqueId.'.png';
-			$newImageSubjectId = $uniqueId.'-png';
-
-			$enrollResponse = $kairosObj->enroll($newImageURL, $newImageSubjectId);
-		}
-
-		// just pass the results directly back to the client since they're already json
-		echo $response;
-	}
-
-	die();
-}
+include('armyofjon.php')
 ?>
 <!doctype html>
 <html>
@@ -91,6 +49,9 @@ if (isset($_REQUEST['ajax']))
 		        	<br/>It only takes seconds.
 		        </p>
 		        <p><a class="btn btn-lg btn-success" id="scanMeButton" href="#" role="button">Scan Me!</a></p>
+		        <p class="smallerText">
+		        	If you look enough like the <a href="http://armyofjon.com/pics/" target="_blank">rest of us</a>, you'll be invited to join the army.
+		        </p>
 	      	</div>
 
 	      	<div class="row marketing">
@@ -127,7 +88,7 @@ if (isset($_REQUEST['ajax']))
 
 		          	<h4>Current Members</h4>
 		          	<p>
-		          		Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.
+		          		Visit our <a href="http://armyofjon.com/pics/" target="_blank">Gallery of Army Members!</a>
 		          	</p>
 
 		          	<h4>Can I Upload a Picture?</h4>
@@ -190,6 +151,9 @@ if (isset($_REQUEST['ajax']))
 		          		</li>
 		          		<li>
 		          			Look 'n' feel from <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>
+		          		</li>
+		          		<li>
+		          			Image gallery by <a href="http://fotorama.io/" target="_blank">fotorama.io</a>
 		          		</li>
 		          		<li>
 		          			Thanks for the <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos" target="_blank">WebRTC example</a>, Mozilla!

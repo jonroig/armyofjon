@@ -220,24 +220,34 @@ aoj.app=(function()
         // otherwise... success!
         else if (typeof data.images[0].candidates != 'undefined')
         {
-          $('#uploadModalLabel').html('Match!');
+          $('#uploadModalLabel').html('Match! Scroll Down For More Information...');
 
           var confidence = Math.round(data.images[0].transaction.confidence * 100);
           var outputTxt = 'Match! Confidence=' + confidence + '%<br/>';
           $('#statusText').html(outputTxt);
           $('#uploadStatusText').show().html(outputTxt);
 
-          outputTxt = '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
-          outputTxt += "<br/>Congratulations! You've been accepted! Your picture will be used as a sample for all future Army of Jon members.";
+          // webcam success
+          outputTxt = '<h3>Top Image Match</h3>';
+          outputTxt += '<img id="matchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
+          outputTxt += "<br/><h3>Congratulations! You've been Accepted!</h3>";
+          outputTxt += "Welcome to the Army of Jon! ";
+          outputTxt += "Your picture will be used as a sample for all future Army of Jon members and we'll see how The Army of Jon continues to mutate. ";
+          outputTxt += "Check the gallery to see yourself among the other illustrious members!";
           $('#webcamModalImgArea').html(outputTxt);
 
-          outputTxt = '<img id="uploadMatchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
-          outputTxt += "<br/>Congratulations! You've been accepted! Your picture will be used as a sample for all future Army of Jon members.";
+          // upload success
+          outputTxt = '<h3>Top Image Match</h3>';
+          outputTxt += '<img id="uploadMatchPic" src="/pics/' + data.images[0].transaction.subject.replace('-','.') +'"/>';
+          outputTxt += "<br/><h3>Congratulations! You've been Accepted!</h3>";
+          outputTxt += "Welcome to the Army of Jon! ";
+          outputTxt += "Your picture will be used as a sample for all future Army of Jon members and we'll see how The Army of Jon continues to mutate. ";
+          outputTxt += "<br/><br/>Check the gallery to see yourself among the other illustrious members!";
           $('#uploadModalImgArea').show().html(outputTxt);
 
           $('#matchPic').width(640);
           $('#uploadMatchPic').width(640);
-          $('#uploadMatchPic').css('left','15px').css('position','relative');
+          $('#uploadMatchPic').css('left','-5px').css('position','relative');
 
           $('#sendAndScanButton').hide();
           $(window).resize();
