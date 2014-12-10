@@ -124,7 +124,7 @@ include('armyofjon.php');
 		          		<a href="http://www.textethan.com/" target="_blank">Ethan</a>, I needed to create something quick and pointless.
 		          		I like the idea of combining readily existing
 		          		technologies, some of which, like the facial recognition system, are very complicated, and stringing them together
-		          		to do something kind of dumb.
+		          		to do something kind of dumb. I built this in a weekend... I'm sure it shows.
 		          	</p>
 		          	<p>
 		          		To that end, this is kind of an art project. We'll see how the corpus of pictures which compose my army changes
