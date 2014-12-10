@@ -46,11 +46,11 @@ include('armyofjon.php');
 		        <p class="lead">
 		        	Futuristic html5 technology takes control of your webcam.
 		        	<br/>Facial recognition algorithms scan and judge you.
-		        	<br/>It only takes seconds.
+		        	<br/>Takes only seconds seconds.
 		        </p>
 		        <p><a class="btn btn-lg btn-success" id="scanMeButton" href="#" role="button">Scan Me!</a></p>
 		        <p class="smallerText">
-		        	If you look enough like the <a href="http://armyofjon.com/pics/" target="_blank">rest of us</a>, you'll be invited to join the army.
+		        	If you look enough like the rest of us,<br/>induction into <a href="/pics/" target="_blank">The Army</a> is instant and automatic.
 		        </p>
 	      	</div>
 
@@ -116,12 +116,14 @@ include('armyofjon.php');
 		          		ensure my continued relevance. There's always new things, new technologies that you're expected
 		          		to know.
 		          		You can't just read about these things in a book... or, at least I can't. I needed a project.
+		          	</p>
+		          	<p>
 		          		 In the
 		          		spirit of <a href="http://www.justyo.co/" target="_blank">Yo</a>,
 		          		<a href="http://xoxco.com/x/tacos/" target="_blank">TacoText</a> and
-		          		<a href="http://www.textethan.com/" target="_blank">Ethan</a>, I needed something quick and pointless.
+		          		<a href="http://www.textethan.com/" target="_blank">Ethan</a>, I needed to create something quick and pointless.
 		          		I like the idea of combining readily existing
-		          		technologies, some which, like the facial recognition system, are very complicated, and stringing them together
+		          		technologies, some of which, like the facial recognition system, are very complicated, and stringing them together
 		          		to do something kind of dumb.
 		          	</p>
 		          	<p>
