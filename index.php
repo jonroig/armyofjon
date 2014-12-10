@@ -14,7 +14,7 @@ $apiGalleryId = 'pics';
 $baseImageURL = 'http://armyofjon.com/pics';
 
 include('kairosInterface.php');
-include('armyofjon.php')
+include('armyofjon.php');
 ?>
 <!doctype html>
 <html>

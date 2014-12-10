@@ -26,14 +26,13 @@ if (isset($_REQUEST['ajax']))
 		$jsonResponse = json_decode($response);
 		if (isset($jsonResponse->images) && isset($jsonResponse->images[0]->candidates) && isset($jsonResponse->images[0]->transaction->subject) && $jsonResponse->images[0]->transaction->confidence != 1)
 		{
-			// if it's a match, we want to save it...
+			// if it's a match, we want to save it as a png
 			$uniqueId = uniqid();
 			imagepng($imgContainer, "pics/".$uniqueId.'.png');
 
 			// enroll the new pic in the gallery
 			$newImageURL = $baseImageURL.'/'.$uniqueId.'.png';
 			$newImageSubjectId = $uniqueId.'-png';
-
 			$enrollResponse = $kairosObj->enroll($newImageURL, $newImageSubjectId);
 		}
 

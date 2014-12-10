@@ -11,8 +11,7 @@
 			// populate the div with all the image gallery images...
 			$dir = dir(".");
 			while (false !== ($entry = $dir->read())) {
-			   echo $entry."\n";
-			   if ($entry != '..' && $entry != '.')
+			   if (substr($entry,0,1) != '.' )
 			   {
 			   	echo '<img src="'.$entry.'">';
 			   }
